@@ -14,7 +14,10 @@ Vagrant.configure("2") do |config|
       v.cpus = 2
       v.gui = true
     end
-    workstation.vm.provision "setup", type: "shell", run: "never" do |s|
+    workstation.vm.provision "setup_system", type: "shell", run: "never" do |s|
+      s.path = "scripts/setup_system.sh"
+    end
+    workstation.vm.provision "setup_project", type: "shell", run: "never" do |s|
       s.path = "scripts/setup_project.sh"
     end
   end
