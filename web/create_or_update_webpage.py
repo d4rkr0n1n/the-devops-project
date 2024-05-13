@@ -1,5 +1,8 @@
 from bitmath import Byte
-import psutil,time,sys
+import psutil
+import time
+import sys
+
 
 def retrieve_device_details():
 	return {
@@ -7,14 +10,14 @@ def retrieve_device_details():
 		"cpu_used": psutil.cpu_percent(interval=1),
 		"ram_size": round(float(Byte(psutil.virtual_memory().total).to_GiB()), 1),
 		"ram_used": psutil.virtual_memory().percent,
-		"disk_size": round(float(Byte(psutil.disk_usage("C:").total).to_GiB()), 1),
-		"disk_used": psutil.disk_usage("C:").percent,
-		"ip": psutil.net_if_addrs()["Wi-Fi"][1].address,
+		"disk_size": round(float(Byte(psutil.disk_usage("/").total).to_GiB()), 1),
+		"disk_used": psutil.disk_usage("/").percent,
+		"ip": psutil.net_if_addrs()["enp0s8"][0].address
 	}
 
 
 def read_html_code():
-	return open("index_tmp.html", "r+").read()
+  return open("index_tmp.html", "r+").read()
 
 
 def update_html_code(device_details, html_code):
@@ -37,7 +40,9 @@ def main():
 		updated_html_code = update_html_code(device_details, html_code)
 		write_html_code(updated_html_code)
 		time.sleep(2)
-if __name__ == '__main__':
+
+
+if __name__ == "__main__":
 	try:
 		main()
 	except KeyboardInterrupt:

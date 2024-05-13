@@ -1,0 +1,24 @@
+IP_NETWORK="192.168.69."
+WORKSTATION_IP=69
+
+Vagrant.configure("2") do |config|
+  config.ssh.insert_key = false
+  config.vm.box_check_update = false
+  config.vm.define "workstation" do |workstation|
+    workstation.vm.box = "ubuntu/jammy64"
+    workstation.vm.hostname = "workstation"
+    workstation.vm.network "private_network", ip: IP_NETWORK + "#{WORKSTATION_IP}"
+    workstation.vm.provider :virtualbox do |v|
+      v.name = "workstation"
+      v.memory = 1024
+      v.cpus = 1
+      v.gui = true
+    end
+    workstation.vm.provision "upgrades", type: "shell", run: "never" do |s|
+      s.path = "scripts/upgrades.sh"
+    end
+    workstation.vm.provision "setup", type: "shell", run: "never" do |s|
+      s.path = "scripts/setup_project.sh"
+    end
+  end
+end
